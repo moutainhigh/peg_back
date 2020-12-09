@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ~
+  ~      Copyright (c) 2018-2025, kbopark All rights reserved.
+  ~
+  ~  Redistribution and use in source and binary forms, with or without
+  ~  modification, are permitted provided that the following conditions are met:
+  ~
+  ~ Redistributions of source code must retain the above copyright notice,
+  ~  this list of conditions and the following disclaimer.
+  ~  Redistributions in binary form must reproduce the above copyright
+  ~  notice, this list of conditions and the following disclaimer in the
+  ~  documentation and/or other materials provided with the distribution.
+  ~  Neither the name of the pig4cloud.com developer nor the names of its
+  ~  contributors may be used to endorse or promote products derived from
+  ~  this software without specific prior written permission.
+  ~  Author: kbopark
+  ~
+  -->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kbopark.operation.mapper.CouponUsedLogMapper">
+
+	<resultMap id="couponUsedLogMap" type="com.kbopark.operation.entity.CouponUsedLog">
+		<id property="recordId" column="record_id"/>
+		<result property="receiveId" column="receive_id"/>
+		<result property="merchantId" column="merchant_id"/>
+		<result property="merchantName" column="merchant_name"/>
+		<result property="channelId" column="channel_id"/>
+		<result property="channelName" column="channel_name"/>
+		<result property="operationId" column="operation_id"/>
+		<result property="operationName" column="operation_name"/>
+		<result property="couponSerialNumber" column="coupon_serial_number"/>
+		<result property="couponName" column="coupon_name"/>
+		<result property="couponType" column="coupon_type"/>
+		<result property="couponLimitTime" column="coupon_limit_time"/>
+		<result property="couponRule" column="coupon_rule"/>
+		<result property="memberId" column="member_id"/>
+		<result property="memberCode" column="member_code"/>
+		<result property="memberName" column="member_name"/>
+		<result property="memberPhone" column="member_phone"/>
+		<result property="memberLogo" column="member_logo"/>
+		<result property="createTime" column="create_time"/>
+		<result property="createBy" column="create_by"/>
+		<result property="updateTime" column="update_time"/>
+		<result property="delFlag" column="del_flag"/>
+		<result property="orderNumber" column="order_number"/>
+		<result property="payable" column="payable"/>
+		<result property="discount" column="discount"/>
+		<result property="money" column="money"/>
+		<result property="notifyTime" column="notify_time"/>
+	</resultMap>
+	<!--商家核销记录分页列表查询-->
+	<select id="selectMerchantUsedPage" resultType="com.kbopark.operation.dto.MerchantCouponUsedDTO">
+		select kminfo.avatar as member_avatar,
+		kminfo.real_name as member_realname,
+		kminfo.nick_name as member_nickname,
+		kminfo.phone as member_phone,
+		ifnull(date_format(kcul.create_time, '%Y-%m-%d'), '-') as use_time,
+		cinfo.sub_money as coupon_money,
+		cinfo.full_money as coupon_full_money,
+		cr.coupon_money as redpack_money,
+		cinfo.coupon_set_info as set_info,
+		cinfo.name as coupon_name,
+		cinfo.type as type,
+		cinfo.coupon_type as coupon_type,
+		kcul.record_id as id
+		from kboparkx_coupon_used_log kcul
+		left join kboparkx_coupon_receive cr on cr.coupon_serial_number = kcul.coupon_serial_number
+		left join kboparkx_coupon_info cinfo on cinfo.coupon_serial_number = kcul.coupon_serial_number
+		left join kboparkx_member_info kminfo on kminfo.id = kcul.member_id
+		<where>
+			kcul.del_flag = 0
+			and cinfo.type = #{query.typeKey}
+			<if test="query.merchantIdKey!=null and query.merchantIdKey != ''">
+				and kminfo.id = #{query.merchantIdKey}
+			</if>
+			<if test="query.memberIdKey!=null and query.memberIdKey != ''">
+				and cr.member_id = #{query.memberIdKey}
+			</if>
+			<if test="query.couponTypeKey!=null and query.couponTypeKey != ''">
+				and cinfo.coupon_type = #{query.couponTypeKey}
+			</if>
+		</where>
+		order by kcul.create_time desc
+	</select>
+</mapper>

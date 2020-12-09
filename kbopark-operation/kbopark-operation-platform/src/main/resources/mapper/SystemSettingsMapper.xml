@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ~
+  ~      Copyright (c) 2018-2025, kbopark All rights reserved.
+  ~
+  ~  Redistribution and use in source and binary forms, with or without
+  ~  modification, are permitted provided that the following conditions are met:
+  ~
+  ~ Redistributions of source code must retain the above copyright notice,
+  ~  this list of conditions and the following disclaimer.
+  ~  Redistributions in binary form must reproduce the above copyright
+  ~  notice, this list of conditions and the following disclaimer in the
+  ~  documentation and/or other materials provided with the distribution.
+  ~  Neither the name of the pig4cloud.com developer nor the names of its
+  ~  contributors may be used to endorse or promote products derived from
+  ~  this software without specific prior written permission.
+  ~  Author: kbopark
+  ~
+  -->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kbopark.operation.mapper.SystemSettingsMapper">
+
+	<resultMap id="systemSettingsMap" type="com.kbopark.operation.entity.SystemSettings">
+		<id property="id" column="id"/>
+		<result property="systemName" column="system_name"/>
+		<result property="aqNumber" column="aq_number"/>
+		<result property="serviceTel" column="service_tel"/>
+		<result property="registrationProtocol" column="registration_protocol"/>
+		<result property="disclaimer" column="disclaimer"/>
+		<result property="couponRule" column="coupon_rule"/>
+		<result property="couponAlertPercent" column="coupon_alert_percent"/>
+		<result property="couponAlertTip" column="coupon_alert_tip"/>
+		<result property="createTime" column="create_time"/>
+		<result property="updateTime" column="update_time"/>
+	</resultMap>
+</mapper>

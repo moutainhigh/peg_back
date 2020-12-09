@@ -1,0 +1,5 @@
+# 配置 feignclient 的全类名路径， 避免包名不规范无法扫描问题
+cn.qdzhhl.kbopark.common.feign.KboparkFeignAutoConfiguration=\
+  com.kbopark.operation.fegin.RemoteOrderService,\
+  com.kbopark.operation.fegin.RemoteMerchantService,\
+  com.kbopark.operation.fegin.RemoteMemberService

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ~
+  ~      Copyright (c) 2018-2025, kbopark All rights reserved.
+  ~
+  ~  Redistribution and use in source and binary forms, with or without
+  ~  modification, are permitted provided that the following conditions are met:
+  ~
+  ~ Redistributions of source code must retain the above copyright notice,
+  ~  this list of conditions and the following disclaimer.
+  ~  Redistributions in binary form must reproduce the above copyright
+  ~  notice, this list of conditions and the following disclaimer in the
+  ~  documentation and/or other materials provided with the distribution.
+  ~  Neither the name of the pig4cloud.com developer nor the names of its
+  ~  contributors may be used to endorse or promote products derived from
+  ~  this software without specific prior written permission.
+  ~  Author: kbopark
+  ~
+  -->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kbopark.kbpay.mapper.PayTradeOrderMapper">
+
+	<resultMap id="payTradeOrderMap" type="com.kbopark.kbpay.entity.PayTradeOrder">
+		<id property="id" column="id"/>
+		<result property="payChannelOrderId" column="pay_channel_order_id"/>
+		<result property="merchantId" column="merchant_id"/>
+		<result property="tradeBizNumber" column="trade_biz_number"/>
+		<result property="payServiceUrl" column="pay_service_url"/>
+		<result property="bizGoodOrderId" column="biz_good_order_id"/>
+		<result property="merchantPayChannelId" column="merchant_pay_channel_id"/>
+		<result property="payChannelValue" column="pay_channel_value"/>
+		<result property="payChannelParamsSnapshot" column="pay_channel_params_snapshot"/>
+		<result property="money" column="money"/>
+		<result property="goods" column="goods"/>
+		<result property="payStatus" column="pay_status"/>
+		<result property="notifyUrl" column="notify_url"/>
+		<result property="returnUrl" column="return_url"/>
+		<result property="notifyCount" column="notify_count"/>
+		<result property="lastNotifyTime" column="last_notify_time"/>
+		<result property="paySuccessTime" column="pay_success_time"/>
+		<result property="tenantId" column="tenant_id"/>
+		<result property="delFlag" column="del_flag"/>
+		<result property="status" column="status"/>
+		<result property="createTime" column="create_time"/>
+		<result property="updateTime" column="update_time"/>
+		<result property="payMethod" column="pay_method"/>
+		<result property="orderDescription" column="order_description"/>
+	</resultMap>
+</mapper>

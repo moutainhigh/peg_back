@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ~
+  ~      Copyright (c) 2018-2025, kbopark All rights reserved.
+  ~
+  ~  Redistribution and use in source and binary forms, with or without
+  ~  modification, are permitted provided that the following conditions are met:
+  ~
+  ~ Redistributions of source code must retain the above copyright notice,
+  ~  this list of conditions and the following disclaimer.
+  ~  Redistributions in binary form must reproduce the above copyright
+  ~  notice, this list of conditions and the following disclaimer in the
+  ~  documentation and/or other materials provided with the distribution.
+  ~  Neither the name of the pig4cloud.com developer nor the names of its
+  ~  contributors may be used to endorse or promote products derived from
+  ~  this software without specific prior written permission.
+  ~  Author: kbopark
+  ~
+  -->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kbopark.operation.mapper.SubwayTicketMapper">
+
+	<resultMap id="subwayTicketMap" type="com.kbopark.operation.entity.SubwayTicket">
+		<id property="id" column="id"/>
+		<result property="name" column="name"/>
+		<result property="subwayCode" column="subway_code"/>
+		<result property="serialNumber" column="serial_number"/>
+		<result property="value" column="value"/>
+		<result property="effectType" column="effect_type"/>
+		<result property="effectDay" column="effect_day"/>
+		<result property="effectStartTime" column="effect_start_time"/>
+		<result property="effectEndTime" column="effect_end_time"/>
+		<result property="ruleInfo" column="rule_info"/>
+		<result property="createTime" column="create_time"/>
+		<result property="createBy" column="create_by"/>
+		<result property="updateTime" column="update_time"/>
+		<result property="delFlag" column="del_flag"/>
+		<result property="usedStatus" column="used_status"/>
+		<result property="totalNumber" column="total_number"/>
+		<result property="usedNumber" column="used_number"/>
+	</resultMap>
+</mapper>

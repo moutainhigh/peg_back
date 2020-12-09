@@ -1,0 +1,152 @@
+# 使用说明 V3.8.0
+# 1. 使用docker-compose  宿主机不需要配置host来发现
+# 2. 无需修改源码，根目录  docker-compose up 即可
+# 3. 静静等待服务启动
+
+version: '2'
+services:
+  kbopark-mysql:
+    build:
+      context: ./db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    restart: always
+    container_name: kbopark-mysql
+    image: kbopark-mysql
+    ports:
+      - 3306:3306
+    volumes:
+      - ./kbopark-mysql:/var/lib/mysql
+    command: --lower_case_table_names=1
+
+  kbopark-xxl:
+    container_name: kbopark-xxl
+    image: xuxueli/xxl-job-admin:2.2.0
+    restart: always
+    environment:
+      PARAMS: "--server.port=9080 --spring.datasource.url=jdbc:mysql://kbopark-mysql:3306/kboparkx_job?Unicode=true&characterEncoding=UTF-8 --spring.datasource.username=root --spring.datasource.password=root"
+    ports:
+      - 9080:9080
+
+  kbopark-redis:
+    container_name: kbopark-redis
+    image: redis:5.0.7
+    restart: always
+    ports:
+      - 6379:6379
+
+  kbopark-minio:
+    container_name: kbopark-minio
+    image: minio/minio
+    command: server /data
+    ports:
+      - 9000:9000
+    volumes:
+      - ./data:/data
+      - ./config:/root/.minio
+    environment:
+      - MINIO_DOMAIN=kbopark-minio
+      - MINIO_ACCESS_KEY=kbopark
+      - MINIO_SECRET_KEY=kbopark
+
+  kbopark-register:
+    build:
+      context: ./kbopark-register
+    restart: always
+    container_name: kbopark-register
+    image: kbopark-register
+    ports:
+      - 8848:8848
+
+  kbopark-gateway:
+    build:
+      context: ./kbopark-gateway
+    restart: always
+    container_name: kbopark-gateway
+    image: kbopark-gateway
+    ports:
+      - 9999:9999
+
+  kbopark-auth:
+    build:
+      context: ./kbopark-auth
+    restart: always
+    container_name: kbopark-auth
+    image: kbopark-auth
+
+  kbopark-upms:
+    build:
+      context: ./kbopark-upms/kbopark-upms-biz
+    restart: always
+    container_name: kbopark-upms
+    image: kbopark-upms
+
+  kbopark-monitor:
+    build:
+      context: ./kbopark-visual/kbopark-monitor
+    restart: always
+    image: kbopark-monitor
+    container_name: kbopark-monitor
+    ports:
+      - 5001:5001
+
+  kbopark-daemon-quartz:
+    build:
+      context: ./kbopark-visual/kbopark-daemon-quartz
+    restart: always
+    image: kbopark-daemon-quartz
+    container_name: kbopark-daemon-quartz
+
+  kbopark-daemon-elastic-job:
+    build:
+      context: ./kbopark-visual/kbopark-daemon-elastic-job
+    restart: always
+    image: kbopark-daemon-elastic-job
+    container_name: kbopark-daemon-elastic-job
+
+  kbopark-codegen:
+    build:
+      context: ./kbopark-visual/kbopark-codegen
+    restart: always
+    image: kbopark-codegen
+    container_name: kbopark-codegen
+
+  kbopark-mp-platform:
+    build:
+      context: ./kbopark-visual/kbopark-mp-platform
+    restart: always
+    image: kbopark-mp-platform
+    container_name: kbopark-mp-platform
+
+  kbopark-pay-platform:
+    build:
+      context: ./kbopark-visual/kbopark-pay-platform
+    restart: always
+    image: kbopark-pay-platform
+    container_name: kbopark-pay-platform
+
+  kbopark-oa-platform:
+    build:
+      context: ./kbopark-visual/kbopark-oa-platform
+    restart: always
+    image: kbopark-oa-platform
+    container_name: kbopark-oa-platform
+
+  kbopark-tx-manager:
+    build:
+      context: ./kbopark-visual/kbopark-tx-manager
+    restart: always
+    image: kbopark-tx-manager
+    container_name: kbopark-tx-manager
+    ports:
+      - 5004:5004
+      - 9998:9998
+
+  kbopark-sentinel:
+    build:
+      context: ./kbopark-visual/kbopark-sentinel-dashboard
+    restart: always
+    image: kbopark-sentinel
+    container_name: kbopark-sentinel
+    ports:
+      - 5020:5020

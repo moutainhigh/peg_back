@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ~
+  ~      Copyright (c) 2018-2025, kbopark All rights reserved.
+  ~
+  ~  Redistribution and use in source and binary forms, with or without
+  ~  modification, are permitted provided that the following conditions are met:
+  ~
+  ~ Redistributions of source code must retain the above copyright notice,
+  ~  this list of conditions and the following disclaimer.
+  ~  Redistributions in binary form must reproduce the above copyright
+  ~  notice, this list of conditions and the following disclaimer in the
+  ~  documentation and/or other materials provided with the distribution.
+  ~  Neither the name of the pig4cloud.com developer nor the names of its
+  ~  contributors may be used to endorse or promote products derived from
+  ~  this software without specific prior written permission.
+  ~  Author: kbopark
+  ~
+  -->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kbopark.operation.mapper.LedgerOrderMapper">
+
+	<resultMap id="ledgerOrderMap" type="com.kbopark.operation.entity.LedgerOrder">
+		<id property="id" column="id"/>
+		<result property="ledgerSerialNumber" column="ledger_serial_number"/>
+		<result property="ledgerCategory" column="ledger_category"/>
+		<result property="ledgerBatchNo" column="ledger_batch_no"/>
+		<result property="ledgerThirdNo" column="ledger_third_no"/>
+		<result property="ledgerStatus" column="ledger_status"/>
+		<result property="operationId" column="operation_id"/>
+		<result property="operationName" column="operation_name"/>
+		<result property="operationPercent" column="operation_percent"/>
+		<result property="operationLedgerAccount" column="operation_ledger_account"/>
+		<result property="platformId" column="platform_id"/>
+		<result property="platformName" column="platform_name"/>
+		<result property="platformPercent" column="platform_percent"/>
+		<result property="platformLegerAccount" column="platform_leger_account"/>
+		<result property="merchantId" column="merchant_id"/>
+		<result property="merchantName" column="merchant_name"/>
+		<result property="merchantPercent" column="merchant_percent"/>
+		<result property="merchantLegerAccount" column="merchant_leger_account"/>
+		<result property="orderNumber" column="order_number"/>
+		<result property="payable" column="payable"/>
+		<result property="discount" column="discount"/>
+		<result property="money" column="money"/>
+		<result property="ledgerCreateStatus" column="ledger_create_status"/>
+		<result property="ledgerTime" column="ledger_time"/>
+		<result property="createTime" column="create_time"/>
+		<result property="createBy" column="create_by"/>
+		<result property="updateTime" column="update_time"/>
+		<result property="delFlag" column="del_flag"/>
+	</resultMap>
+</mapper>

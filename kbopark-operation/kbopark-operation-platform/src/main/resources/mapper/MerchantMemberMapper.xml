@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ~
+  ~      Copyright (c) 2018-2025, kbopark All rights reserved.
+  ~
+  ~  Redistribution and use in source and binary forms, with or without
+  ~  modification, are permitted provided that the following conditions are met:
+  ~
+  ~ Redistributions of source code must retain the above copyright notice,
+  ~  this list of conditions and the following disclaimer.
+  ~  Redistributions in binary form must reproduce the above copyright
+  ~  notice, this list of conditions and the following disclaimer in the
+  ~  documentation and/or other materials provided with the distribution.
+  ~  Neither the name of the pig4cloud.com developer nor the names of its
+  ~  contributors may be used to endorse or promote products derived from
+  ~  this software without specific prior written permission.
+  ~  Author: kbopark
+  ~
+  -->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kbopark.operation.mapper.MerchantMemberMapper">
+
+	<resultMap id="merchantMemberMap" type="com.kbopark.operation.entity.MerchantMember">
+		<id property="id" column="id"/>
+		<result property="operatorId" column="operator_id"/>
+		<result property="distributorId" column="distributor_id"/>
+		<result property="merchantId" column="merchant_id"/>
+		<result property="memberId" column="member_id"/>
+		<result property="amount" column="amount"/>
+		<result property="createTime" column="create_time"/>
+		<result property="updateTime" column="update_time"/>
+		<result property="delFlag" column="del_flag"/>
+		<result property="status" column="status"/>
+	</resultMap>
+
+	<!--自定义分页-->
+	<select id="selectMemberPage" resultType="com.kbopark.operation.dto.MerchantMemberPageDTO">
+		select mm.member_id as member_id,
+		merchant.operator_id as operator_id,
+		merchant.distributor_id as distributor_id,
+		merchant.name as merchant_name,
+		merchant.id as merchant_id,
+		minfo.user_name as member_username,
+		minfo.nick_name as member_nickname,
+		minfo.real_name as member_realname,
+		minfo.avatar as member_avatar,
+		minfo.phone as member_phone,
+		minfo.sex as member_sex,
+		minfo.email as member_email,
+		(select count(1) from kboparkx_merchant_member
+		<where>
+			member_id= mm.member_id
+			<if test="query.operatorIdKey!=null and query.operatorIdKey != ''">
+				and operator_id = #{query.operatorIdKey}
+			</if>
+			<if test="query.distributorIdKey!=null and query.distributorIdKey != ''">
+				and distributor_id = #{query.distributorIdKey}
+			</if>
+		</where>
+		) as vip_card_num
+
+		from kboparkx_merchant_member mm
+		left join kboparkx_merchant merchant on merchant.id = mm.merchant_id
+		left join kboparkx_member_info minfo on minfo.id = mm.member_id
+		<where>
+			mm.del_flag = 0
+			<if test="query.operatorIdKey!=null and query.operatorIdKey != ''">
+				and merchant.operator_id = #{query.operatorIdKey}
+			</if>
+			<if test="query.distributorIdKey!=null and query.distributorIdKey != ''">
+				and merchant.distributor_id = #{query.distributorIdKey}
+			</if>
+			<if test="query.merchantIdKey!=null and query.merchantIdKey != ''">
+				and merchant.id = #{query.merchantIdKey}
+			</if>
+			<if test="query.keyWord!=null and query.keyWord != ''">
+				and (
+				minfo.user_name like concat('%', #{query.keyWord}, '%')
+				or minfo.nick_name like concat('%', #{query.keyWord}, '%')
+				or minfo.phone like concat('%', #{query.keyWord}, '%')
+				)
+			</if>
+		</where>
+	</select>
+
+	<!--会员卡分页查询-->
+	<select id="selectVipcardPage" resultType="com.kbopark.operation.dto.VipCardDTO">
+		select km.operator_id as operator_id,
+		km.distributor_id as distributor_id,
+		km.id as merchant_id,
+		km.logo as merchant_logo,
+		kmm.balance as balance,
+		km.name as merchant_name,
+		setting.vip_bg_color as merchant_vip_color,
+		(select count(1) from kboparkx_coupon_receive cr where cr.merchant_id = km.id and cr.member_id = kmm.member_id and cr.coupon_type = 'coupon' and !cr.del_flag and
+			<include refid="com.kbopark.operation.mapper.CouponReceiveMapper.canUseCouponCondition"></include>
+		) as coupon_num,
+		(select count(1) from kboparkx_coupon_receive cr where cr.merchant_id = km.id and cr.member_id = kmm.member_id and cr.coupon_type = 'redpack' and !cr.del_flag and
+			<include refid="com.kbopark.operation.mapper.CouponReceiveMapper.canUseCouponCondition"></include>
+		) as red_packet_num
+		from kboparkx_merchant_member kmm
+		left join kboparkx_merchant km on kmm.merchant_id = km.id
+		left join kboparkx_merchant_basic_setting setting on kmm.merchant_id = setting.merchant_id
+		<where>
+			kmm.del_flag = 0
+			<if test="query.memberId!=null and query.memberId != ''">
+				and kmm.member_id = #{query.memberId}
+			</if>
+			<if test="query.operatorId!=null and query.operatorId != ''">
+				and km.operator_id = #{query.operatorId}
+			</if>
+			<if test="query.distributorId!=null and query.distributorId != ''">
+				and km.distributor_id = #{query.distributorId}
+			</if>
+			<if test="query.merchantId!=null and query.merchantId != ''">
+				and km.id = #{query.merchantId}
+			</if>
+		</where>
+	</select>
+
+	<select id="lastMonthCountGroup" resultType="com.kbopark.operation.apidto.MonthNumberStatistics">
+		select dates.year_num as year_num, dates.month_num as month_num, ifnull(count_list.`number`, '0') as `number`
+		from
+		<foreach collection="offsetList" item="offset" open="(" close=") as dates" separator="union">
+			select YEAR(DATE_SUB(current_date, interval ${offset} month)) as year_num,
+			MONTH(DATE_SUB(current_date, interval ${offset} month)) as month_num,
+			concat(YEAR(DATE_SUB(current_date, interval ${offset} month)), '-', MONTH(DATE_SUB(current_date, interval ${offset} month))) as year_month_num
+		</foreach>
+		left join (select count(1) as `number`,
+		concat(YEAR(kmm.create_time), '-', MONTH(kmm.create_time)) as year_month_number
+		from kboparkx_merchant_member kmm
+		<where>
+			!kmm.del_flag and kmm.create_time &gt; DATE_SUB(current_date, interval ${offsetList.size} month)
+			<if test="merchantId != null and merchantId != ''">
+				and kmm.merchant_id = #{merchantId}
+			</if>
+		</where>
+		group by concat(YEAR(kmm.create_time), '-', MONTH(kmm.create_time)))
+		as count_list
+		on dates.year_month_num = count_list.year_month_number
+		order by year_num, month_num
+	</select>
+</mapper>

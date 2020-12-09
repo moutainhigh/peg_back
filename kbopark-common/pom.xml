@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~
+  ~      Copyright (c) 2018-2025, kbopark All rights reserved.
+  ~
+  ~  Redistribution and use in source and binary forms, with or without
+  ~  modification, are permitted provided that the following conditions are met:
+  ~
+  ~ Redistributions of source code must retain the above copyright notice,
+  ~  this list of conditions and the following disclaimer.
+  ~  Redistributions in binary form must reproduce the above copyright
+  ~  notice, this list of conditions and the following disclaimer in the
+  ~  documentation and/or other materials provided with the distribution.
+  ~  Neither the name of the pig4cloud.com developer nor the names of its
+  ~  contributors may be used to endorse or promote products derived from
+  ~  this software without specific prior written permission.
+  ~  Author: kbopark
+  ~
+  -->
+
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>cn.qdzhhl</groupId>
+		<artifactId>kbopark</artifactId>
+		<version>3.9.0</version>
+	</parent>
+
+	<artifactId>kbopark-common</artifactId>
+	<packaging>pom</packaging>
+
+	<description>kbopark 公共聚合模块</description>
+
+	<modules>
+		<module>kbopark-common-bom</module>
+		<module>kbopark-common-core</module>
+		<module>kbopark-common-data</module>
+		<module>kbopark-common-datasource</module>
+		<module>kbopark-common-feign</module>
+		<module>kbopark-common-gateway</module>
+		<module>kbopark-common-gray</module>
+		<module>kbopark-common-job</module>
+		<module>kbopark-common-log</module>
+		<module>kbopark-common-oss</module>
+		<module>kbopark-common-security</module>
+		<module>kbopark-common-sentinel</module>
+		<module>kbopark-common-sequence</module>
+		<module>kbopark-common-swagger</module>
+		<module>kbopark-common-transaction</module>
+	</modules>
+</project>

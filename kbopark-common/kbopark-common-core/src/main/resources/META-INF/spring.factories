@@ -1,0 +1,5 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  cn.qdzhhl.kbopark.common.core.config.JacksonConfig,\
+  cn.qdzhhl.kbopark.common.core.config.MessageSourceConfig,\
+  cn.qdzhhl.kbopark.common.core.config.RestTemplateConfig,\
+  cn.qdzhhl.kbopark.common.core.util.SpringContextHolder

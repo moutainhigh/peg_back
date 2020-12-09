@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<parent>
+		<artifactId>kbopark-operation</artifactId>
+		<groupId>cn.qdzhhl</groupId>
+		<version>3.9.0</version>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
+
+	<artifactId>kbopark-operation-platform</artifactId>
+	<packaging>jar</packaging>
+
+	<dependencies>
+		<!--operation api、model 模块-->
+		<dependency>
+			<groupId>cn.qdzhhl</groupId>
+			<artifactId>kbopark-operation-api</artifactId>
+			<version>3.9.0</version>
+		</dependency>
+		<dependency>
+			<groupId>cn.qdzhhl</groupId>
+			<artifactId>kbopark-kbpay-api</artifactId>
+			<version>3.9.0</version>
+		</dependency>
+		<dependency>
+			<groupId>cn.qdzhhl</groupId>
+			<artifactId>kbopark-upms-api</artifactId>
+		</dependency>
+		<!--日志处理-->
+		<dependency>
+			<groupId>cn.qdzhhl</groupId>
+			<artifactId>kbopark-common-log</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>cn.qdzhhl</groupId>
+			<artifactId>kbopark-common-data</artifactId>
+		</dependency>
+		<!--swagger-->
+		<dependency>
+			<groupId>cn.qdzhhl</groupId>
+			<artifactId>kbopark-common-swagger</artifactId>
+		</dependency>
+		<!--文件系统-->
+<!--		<dependency>-->
+<!--			<groupId>cn.qdzhhl</groupId>-->
+<!--			<artifactId>kbopark-common-oss</artifactId>-->
+<!--		</dependency>-->
+		<!--注册中心客户端-->
+		<dependency>
+			<groupId>com.alibaba.cloud</groupId>
+			<artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+		</dependency>
+		<!--配置中心客户端-->
+		<dependency>
+			<groupId>com.alibaba.cloud</groupId>
+			<artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+		</dependency>
+		<!--spring security 、oauth、jwt依赖-->
+		<dependency>
+			<groupId>cn.qdzhhl</groupId>
+			<artifactId>kbopark-common-security</artifactId>
+		</dependency>
+		<!--支持动态路由配置 -->
+		<dependency>
+			<groupId>cn.qdzhhl</groupId>
+			<artifactId>kbopark-common-gateway</artifactId>
+		</dependency>
+		<!--sentinel 依赖-->
+		<dependency>
+			<groupId>cn.qdzhhl</groupId>
+			<artifactId>kbopark-common-sentinel</artifactId>
+		</dependency>
+		<!--路由控制-->
+		<dependency>
+			<groupId>cn.qdzhhl</groupId>
+			<artifactId>kbopark-common-gray</artifactId>
+		</dependency>
+		<!--mybatis-->
+		<dependency>
+			<groupId>com.baomidou</groupId>
+			<artifactId>mybatis-plus-boot-starter</artifactId>
+		</dependency>
+		<!-- druid 连接池 -->
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>druid-spring-boot-starter</artifactId>
+		</dependency>
+		<!--数据库-->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+		</dependency>
+		<!--web 模块-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<!--undertow容器-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-undertow</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>4.1.2</version>
+		</dependency>
+		<!-- 添加xstream依赖 -->
+		<dependency>
+			<groupId>com.thoughtworks.xstream</groupId>
+			<artifactId>xstream</artifactId>
+			<version>1.4.10</version>
+		</dependency>
+
+		<!--极光推送SDK-->
+		<dependency>
+			<groupId>cn.jpush.api</groupId>
+			<artifactId>jpush-client</artifactId>
+			<version>3.4.7</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>io.fabric8</groupId>
+				<artifactId>docker-maven-plugin</artifactId>
+				<configuration>
+					<skip>false</skip>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>com.spotify</groupId>
+				<artifactId>dockerfile-maven-plugin</artifactId>
+				<configuration>
+					<skip>false</skip>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<configuration><encoding>UTF-8</encoding>
+					<!-- 过滤后缀为pem、pfx的证书文件 -->
+					<nonFilteredFileExtensions>
+						<nonFilteredFileExtension>cer</nonFilteredFileExtension>
+						<nonFilteredFileExtension>pem</nonFilteredFileExtension>
+						<nonFilteredFileExtension>pfx</nonFilteredFileExtension>
+					</nonFilteredFileExtensions>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+
+</project>

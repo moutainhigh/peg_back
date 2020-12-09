@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ~
+  ~      Copyright (c) 2018-2025, kbopark All rights reserved.
+  ~
+  ~  Redistribution and use in source and binary forms, with or without
+  ~  modification, are permitted provided that the following conditions are met:
+  ~
+  ~ Redistributions of source code must retain the above copyright notice,
+  ~  this list of conditions and the following disclaimer.
+  ~  Redistributions in binary form must reproduce the above copyright
+  ~  notice, this list of conditions and the following disclaimer in the
+  ~  documentation and/or other materials provided with the distribution.
+  ~  Neither the name of the pig4cloud.com developer nor the names of its
+  ~  contributors may be used to endorse or promote products derived from
+  ~  this software without specific prior written permission.
+  ~  Author: kbopark
+  ~
+  -->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kbopark.operation.mapper.MerchantConsumerStrategyMapper">
+
+	<resultMap id="merchantConsumerStrategyMap" type="com.kbopark.operation.entity.MerchantConsumerStrategy">
+		<id property="id" column="id"/>
+		<result property="merchantId" column="merchant_id"/>
+		<result property="money" column="money"/>
+		<result property="weight" column="weight"/>
+		<result property="delFlag" column="del_flag"/>
+		<result property="status" column="status"/>
+		<result property="createTime" column="create_time"/>
+		<result property="updateTime" column="update_time"/>
+		<collection property="prizeList" ofType="com.kbopark.operation.entity.ConsumerStrategyPrize">
+			<id column="prize_id" property="id"/>
+			<result column="id" property="strategyId"/>
+			<result column="prize_type" property="prizeType"/>
+			<result column="coupon_id" property="couponId"/>
+			<result column="coupon_num" property="couponNum"/>
+		</collection>
+	</resultMap>
+
+	<!--自定义分页查询-->
+<!--	<select id="selectStrategyPage" resultMap="merchantConsumerStrategyMap">-->
+<!--		select strategy.id as id,-->
+<!--		strategy.merchant_id as merchant_id,-->
+<!--		strategy.money as money,-->
+<!--		strategy.weight as weight,-->
+<!--		strategy.status as status,-->
+<!--		strategy.create_time as create_time,-->
+<!--		prize.id as prize_id,-->
+<!--		prize.coupon_id as coupon_id,-->
+<!--		prize.coupon_num as coupon_num,-->
+<!--		prize.prize_type as prize_type-->
+<!--		from kboparkx_merchant_consumer_strategy strategy-->
+<!--		left join kboparkx_consumer_strategy_prize prize on prize.strategy_id = strategy.id-->
+<!--		<where>-->
+<!--			strategy.del_flag = 0-->
+<!--			<if test="query.merchantIdKey!=null and query.merchantIdKey != ''">-->
+<!--				and strategy.merchant_id = #{query.merchantIdKey}-->
+<!--			</if>-->
+<!--			<if test="query.statusKey!=null and query.statusKey != ''">-->
+<!--				and strategy.status = #{query.statusKey}-->
+<!--			</if>-->
+<!--			<if test="query.keyWord!=null and query.keyWord != ''">-->
+<!--				and exists(select count(1) from kboparkx_consumer_strategy_prize p left join kboparkx_coupon_info cinfo on cinfo.id=p.coupon_id where cinfo.name like concat('%', #{query.keyWord}, '%'))-->
+<!--			</if>-->
+<!--		</where>-->
+<!--	</select>-->
+
+	<select id="selectStrategyPage" resultType="com.kbopark.operation.entity.MerchantConsumerStrategy">
+		select strategy.id as id,
+		strategy.merchant_id as merchant_id,
+		strategy.money as money,
+		strategy.weight as weight,
+		strategy.prize_type as prize_type,
+		strategy.status as status,
+		strategy.create_time as create_time
+		from kboparkx_merchant_consumer_strategy strategy
+		<where>
+			strategy.del_flag = 0
+			<if test="query.merchantIdKey!=null and query.merchantIdKey != ''">
+				and strategy.merchant_id = #{query.merchantIdKey}
+			</if>
+			<if test="query.statusKey!=null and query.statusKey != ''">
+				and strategy.status = #{query.statusKey}
+			</if>
+			<if test="query.keyWord!=null and query.keyWord != ''">
+				and exists(select p.id from kboparkx_consumer_strategy_prize p left join kboparkx_coupon_info cinfo on cinfo.id=p.coupon_id where p.strategy_id=strategy.id and cinfo.name like concat('%', #{query.keyWord}, '%'))
+			</if>
+		</where>
+	</select>
+</mapper>

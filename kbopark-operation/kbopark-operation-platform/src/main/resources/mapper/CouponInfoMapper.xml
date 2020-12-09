@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ~
+  ~      Copyright (c) 2018-2025, kbopark All rights reserved.
+  ~
+  ~  Redistribution and use in source and binary forms, with or without
+  ~  modification, are permitted provided that the following conditions are met:
+  ~
+  ~ Redistributions of source code must retain the above copyright notice,
+  ~  this list of conditions and the following disclaimer.
+  ~  Redistributions in binary form must reproduce the above copyright
+  ~  notice, this list of conditions and the following disclaimer in the
+  ~  documentation and/or other materials provided with the distribution.
+  ~  Neither the name of the pig4cloud.com developer nor the names of its
+  ~  contributors may be used to endorse or promote products derived from
+  ~  this software without specific prior written permission.
+  ~  Author: kbopark
+  ~
+  -->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kbopark.operation.mapper.CouponInfoMapper">
+
+	<resultMap id="couponInfoMap" type="com.kbopark.operation.entity.CouponInfo">
+		<id property="id" column="id"/>
+		<result property="couponSerialNumber" column="coupon_serial_number"/>
+		<result property="merchantId" column="merchant_id"/>
+		<result property="merchantName" column="merchant_name"/>
+		<result property="channelId" column="channel_id"/>
+		<result property="operationId" column="operation_id"/>
+		<result property="name" column="name"/>
+		<result property="type" column="type"/>
+		<result property="couponType" column="coupon_type"/>
+		<result property="couponSetInfo" column="coupon_set_info"/>
+		<result property="fullMoney" column="full_money"/>
+		<result property="subMoney" column="sub_money"/>
+		<result property="costMoney" column="cost_money"/>
+		<result property="addUpMoney" column="add_up_money"/>
+		<result property="minMoney" column="min_money"/>
+		<result property="maxMoney" column="max_money"/>
+		<result property="branchMerchantIds" column="branch_merchant_ids"/>
+		<result property="startTime" column="start_time"/>
+		<result property="endTime" column="end_time"/>
+		<result property="totalNumber" column="total_number"/>
+		<result property="limitNumber" column="limit_number"/>
+		<result property="usedNumber" column="used_number"/>
+		<result property="remainNumber" column="remain_number"/>
+		<result property="hadAuth" column="had_auth"/>
+		<result property="ruleInfo" column="rule_info"/>
+		<result property="createTime" column="create_time"/>
+		<result property="createUserId" column="create_user_id"/>
+		<result property="createBy" column="create_By"/>
+		<result property="updateTime" column="update_time"/>
+		<result property="delFlag" column="del_flag"/>
+		<result property="lockFlag" column="lock_flag"/>
+		<result property="auditStatus" column="audit_status"/>
+		<result property="auditMarkInfo" column="audit_mark_info"/>
+		<result property="takeStatus" column="take_status"/>
+		<result property="auditTime" column="audit_time"/>
+		<result property="onlineTime" column="online_time"/>
+	</resultMap>
+
+	<resultMap id="couponInfoMerchantMap" type="com.kbopark.operation.vo.CouponInfoVO">
+		<id property="id" column="id"/>
+		<result property="couponSerialNumber" column="coupon_serial_number"/>
+		<result property="merchantId" column="merchant_id"/>
+		<result property="merchantName" column="merchant_name"/>
+		<result property="channelId" column="channel_id"/>
+		<result property="operationId" column="operation_id"/>
+		<result property="name" column="name"/>
+		<result property="type" column="type"/>
+		<result property="couponType" column="coupon_type"/>
+		<result property="couponSetInfo" column="coupon_set_info"/>
+		<result property="fullMoney" column="full_money"/>
+		<result property="subMoney" column="sub_money"/>
+		<result property="costMoney" column="cost_money"/>
+		<result property="addUpMoney" column="add_up_money"/>
+		<result property="minMoney" column="min_money"/>
+		<result property="maxMoney" column="max_money"/>
+		<result property="branchMerchantIds" column="branch_merchant_ids"/>
+		<result property="startTime" column="start_time"/>
+		<result property="endTime" column="end_time"/>
+		<result property="totalNumber" column="total_number"/>
+		<result property="limitNumber" column="limit_number"/>
+		<result property="usedNumber" column="used_number"/>
+		<result property="remainNumber" column="remain_number"/>
+		<result property="hadAuth" column="had_auth"/>
+		<result property="ruleInfo" column="rule_info"/>
+		<result property="createTime" column="create_time"/>
+		<result property="createUserId" column="create_user_id"/>
+		<result property="createBy" column="create_By"/>
+		<result property="updateTime" column="update_time"/>
+		<result property="delFlag" column="del_flag"/>
+		<result property="lockFlag" column="lock_flag"/>
+		<result property="auditStatus" column="audit_status"/>
+		<result property="auditMarkInfo" column="audit_mark_info"/>
+		<result property="takeStatus" column="take_status"/>
+		<result property="auditTime" column="audit_time"/>
+		<result property="onlineTime" column="online_time"/>
+		<result property="userReceived" column="user_received"/>
+
+		<result property="name" column="name"/>
+		<result property="lng" column="lng"/>
+		<result property="lat" column="lat"/>
+		<result property="logo" column="logo"/>
+		<result property="categoryKey" column="category_key"/>
+	</resultMap>
+
+	<resultMap id="merchantInfoMap" type="com.kbopark.operation.vo.MerchantInfoVO">
+		<id property="id" column="id"/>
+		<result property="operatorId" column="operator_id"/>
+		<result property="distributorId" column="distributor_id"/>
+		<result property="promoterId" column="promoter_id"/>
+		<result property="name" column="name"/>
+		<result property="simpleName" column="simple_name"/>
+		<result property="linkMan" column="link_man"/>
+		<result property="linkPhone" column="link_phone"/>
+		<result property="promoteCode" column="promote_code"/>
+		<result property="provinceName" column="province_name"/>
+		<result property="cityName" column="city_name"/>
+		<result property="areaName" column="area_name"/>
+		<result property="address" column="address"/>
+		<result property="lng" column="lng"/>
+		<result property="lat" column="lat"/>
+		<result property="logo" column="logo"/>
+		<result property="remark" column="remark"/>
+		<result property="goodsRemark" column="goods_remark"/>
+		<result property="categoryKey" column="category_key"/>
+	</resultMap>
+
+	<sql id="couponInfoMerchant">
+		c.*,
+		m.lng,
+		m.lat,
+		m.logo,
+		m.link_phone,
+		m.category_key,
+		m.province_name,
+		m.city_name,
+		m.area_name,
+		m.address,
+		m.list_logo,
+		m.banners,
+		<choose>
+			<when test="query.lat != null and query.lat != '' and query.lng != null and query.lng != ''">
+				getDistance(#{query.lng}, #{query.lat}, m.lng, m.lat) as distance
+			</when>
+			<otherwise>
+				0 as distance
+			</otherwise>
+		</choose>
+	</sql>
+	<sql id="merchantInfo">
+			m.id,
+			m.operator_id,
+			m.distributor_id,
+			m.promoter_id,
+			m.`name`,
+			m.simple_name,
+			m.link_man,
+			m.link_phone,
+			m.promote_code,
+			m.province_name,
+			m.city_name,
+			m.area_name,
+			m.address,
+			m.remark,
+			m.goods_remark,
+			m.lng,
+			m.lat,
+			m.logo,
+			m.category_key
+	</sql>
+
+	<select id="getCouponPage" resultMap="couponInfoMerchantMap">
+		SELECT
+		c.*,
+		m.lng,
+		m.lat,
+		m.logo,
+		m.link_phone,
+		m.category_key,
+		m.province_name,
+		m.city_name,
+		m.area_name,
+		m.address,
+		m.list_logo,
+		m.banners,
+		0 as user_received,
+		<choose>
+			<when test="query.lat != null and query.lat != '' and query.lng != null and query.lng != ''">
+				getDistance(${query.lng}, ${query.lat}, m.lng, m.lat) as distance
+			</when>
+			<otherwise>
+				0 as distance
+			</otherwise>
+		</choose>
+		FROM
+		kboparkx_coupon_info c
+		LEFT JOIN kboparkx_merchant m ON c.merchant_id = m.id
+		LEFT JOIN kboparkx_merchant_subway_rel rel ON c.merchant_id = rel.merchant_id
+		<where>
+			c.audit_status = 1
+			AND c.take_status = 1
+			And IF(c.type = 'redpack' and c.coupon_type = 1, c.cost_money-c.add_up_money, c.remain_number) <![CDATA[ > ]]> 0
+			AND c.lock_flag = 0
+			AND c.del_flag = 0
+			AND c.end_time <![CDATA[ >= ]]> CURRENT_DATE
+			<if test="query.lat != null and query.lat != '' and query.lng != null and query.lng != '' and query.searchType == 'near'">
+				AND getDistance(${query.lng}, ${query.lat}, m.lng, m.lat) <![CDATA[ <= ]]> 5000
+			</if>
+			<if test="query.merchantCategory != null and query.merchantCategory != ''">
+				AND m.category_key = #{query.merchantCategory}
+			</if>
+			<if test="query.searchName != null and query.searchName != ''">
+				AND (m.name LIKE CONCAT('%',#{query.searchName},'%') or m.simple_name LIKE CONCAT('%',#{query.searchName},'%') or c.name LIKE CONCAT('%',#{query.searchName},'%'))
+			</if>
+			<if test="query.couponType != null and query.couponType != ''">
+				AND c.type = #{query.couponType}
+			</if>
+			<if test="query.lineCode != null and query.lineCode != ''">
+				AND rel.subway_line_code LIKE CONCAT('%',#{query.lineCode},'%')
+			</if>
+			<if test="memberPhone != null and memberPhone != ''">
+				and (select count(1) from kboparkx_coupon_receive kcr where kcr.member_phone = #{memberPhone} and kcr.coupon_serial_number = c.coupon_serial_number and !kcr.del_flag) &lt; c.limit_number
+			</if>
+		</where>
+		<if test="query.lat != null and query.lat != '' and query.lng != null and query.lng != ''">
+			order by
+			<if test="query.orderByWeight != null and query.orderByWeight">
+				c.weight desc,
+			</if>
+			getDistance(${query.lng}, ${query.lat}, m.lng, m.lat)
+		</if>
+	</select>
+
+	<select id="getMerchantList" resultMap="merchantInfoMap">
+		SELECT
+		<include refid="merchantInfo"/>
+		FROM
+		kboparkx_merchant m
+		WHERE m.review_status > 50
+		AND m.del_flag = 0
+		AND m.`status` = 1
+		AND m.business_status = 1
+		<if test="query.lat != null and query.lat != '' and query.lng != null and query.lng != ''">
+			AND getDistance(#{query.lng}, #{query.lat}, m.lng, m.lat) <![CDATA[ <= ]]> 5000
+		</if>
+		<if test="query.merchantCategory != null and query.merchantCategory != ''">
+			AND m.category_key = #{query.merchantCategory}
+		</if>
+		LIMIT #{query.current},#{query.size}
+	</select>
+
+	<select id="selectMemberMerchantCouponPage" resultType="com.kbopark.operation.vo.MerchantCouponVO">
+		select kci.id as coupon_id,
+		kci.coupon_serial_number as coupon_serial_number,
+		kci.name as coupon_name,
+		kci.type as type,
+		if(kci.type = 'coupon' and kci.coupon_type = 1, kci.sub_money, kci.cost_money) as coupon_cost_money,
+		if(kci.type = 'redpack' AND kci.coupon_type = 1, kci.cost_money, kci.total_number) as coupon_total_number,
+		if(kci.type = 'redpack' and kci.coupon_type = 1, kci.add_up_money, kci.total_number - kci.remain_number) as coupon_received_number,
+		kci.end_time as coupon_end_date,
+		kci.start_time as coupon_start_date,
+		if(kci.type = 'coupon', if(kci.coupon_type = 1, concat('满', kci.full_money, '减', kci.sub_money), ''), if(kci.coupon_type = 1, '随机红包', '普通红包')) as coupon_tip
+		<if test="memberPhone != null and memberPhone != ''">
+			,
+			(select count(1) from kboparkx_coupon_receive kcr where kcr.member_phone = #{memberPhone} and kcr.coupon_serial_number = kci.coupon_serial_number and !kcr.used_status and !kcr.lock_flag and !kcr.del_flag) as
+			coupon_can_use
+		</if>
+		from kboparkx_coupon_info kci
+		<where>
+			kci.end_time &gt;= current_date
+			and kci.lock_flag = 0
+			and kci.take_status = 1
+			and kci.audit_status = 1
+			and kci.lock_flag = 0
+			and kci.del_flag = 0
+			<if test="merchantId != null">
+				AND kci.merchant_id = #{merchantId}
+			</if>
+			<if test="type != null and type != ''">
+				AND kci.type = #{type}
+			</if>
+		</where>
+		order by coupon_can_use desc, id desc;
+	</select>
+
+	<select id="getCanReceiveList" resultType="com.kbopark.operation.vo.MerchantCouponVO">
+		select kci.id as coupon_id,
+		kci.coupon_serial_number as coupon_serial_number,
+		kci.name as coupon_name,
+		kci.type as type,
+		if(kci.type = 'coupon' and kci.coupon_type = 1, kci.sub_money, kci.cost_money) as coupon_cost_money,
+		if(kci.type = 'redpack' AND kci.coupon_type = 1, kci.cost_money, kci.total_number) as coupon_total_number,
+		if(kci.type = 'redpack' and kci.coupon_type = 1, kci.add_up_money, kci.total_number - kci.remain_number) as coupon_received_number,
+		kci.end_time as coupon_end_date,
+		kci.start_time as coupon_start_date,
+		if(kci.type = 'coupon', if(kci.coupon_type = 1, concat('满', kci.full_money, '减', kci.sub_money), ''), if(kci.coupon_type = 1, '随机红包', '普通红包')) as coupon_tip
+		from kboparkx_coupon_info kci
+		<where>
+			kci.end_time &gt;= current_date
+			and kci.lock_flag = 0
+			and kci.take_status = 1
+			and kci.audit_status = 1
+			and kci.lock_flag = 0
+			and kci.del_flag = 0
+			<if test="merchantId != null">
+				AND kci.merchant_id = #{merchantId}
+			</if>
+			<if test="ids != null and ids.size() > 0">
+				AND kci.id in
+				<foreach collection="ids" item="id" index="index" open="(" close=")" separator=",">
+					#{id}
+				</foreach>
+			</if>
+			<if test="memberPhone != null and memberPhone != ''">
+				and (select count(1) from kboparkx_coupon_receive kcr where kcr.member_phone = #{memberPhone} and kcr.coupon_serial_number = kci.coupon_serial_number and !kcr.del_flag) &lt; kci.limit_number
+			</if>
+		</where>
+	</select>
+
+</mapper>

@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ~
+  ~      Copyright (c) 2018-2025, kbopark All rights reserved.
+  ~
+  ~  Redistribution and use in source and binary forms, with or without
+  ~  modification, are permitted provided that the following conditions are met:
+  ~
+  ~ Redistributions of source code must retain the above copyright notice,
+  ~  this list of conditions and the following disclaimer.
+  ~  Redistributions in binary form must reproduce the above copyright
+  ~  notice, this list of conditions and the following disclaimer in the
+  ~  documentation and/or other materials provided with the distribution.
+  ~  Neither the name of the pig4cloud.com developer nor the names of its
+  ~  contributors may be used to endorse or promote products derived from
+  ~  this software without specific prior written permission.
+  ~  Author: kbopark
+  ~
+  -->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kbopark.operation.mapper.CouponReceiveMapper">
+
+
+	<resultMap id="couponReceiveMap" type="com.kbopark.operation.entity.CouponReceive">
+		<id property="id" column="id"/>
+		<result property="couponSerialNumber" column="coupon_serial_number"/>
+		<result property="merchantId" column="merchant_id"/>
+		<result property="merchantName" column="merchant_name"/>
+		<result property="channelId" column="channel_id"/>
+		<result property="channelName" column="channel_name"/>
+		<result property="operationId" column="operation_id"/>
+		<result property="operationName" column="operation_name"/>
+		<result property="couponName" column="coupon_name"/>
+		<result property="couponType" column="coupon_type"/>
+		<result property="couponRule" column="coupon_rule"/>
+		<result property="couponMoney" column="coupon_money"/>
+		<result property="couponStartTime" column="coupon_start_time"/>
+		<result property="couponEndTime" column="coupon_end_time"/>
+		<result property="couponNumber" column="coupon_number"/>
+		<result property="memberId" column="member_id"/>
+		<result property="memberCode" column="member_code"/>
+		<result property="memberName" column="member_name"/>
+		<result property="memberPhone" column="member_phone"/>
+		<result property="memberLogo" column="member_logo"/>
+		<result property="orderNumber" column="order_number"/>
+		<result property="createTime" column="create_time"/>
+		<result property="createBy" column="create_by"/>
+		<result property="updateTime" column="update_time"/>
+		<result property="delFlag" column="del_flag"/>
+		<result property="lockFlag" column="lock_flag"/>
+		<result property="usedStatus" column="used_status"/>
+		<result property="usedTime" column="used_time"/>
+
+	</resultMap>
+
+	<!--可用卡券的条件，cr表指的是 kboparkx_coupon_receive 表-->
+	<sql id="canUseCouponCondition">
+		cr.coupon_end_time &gt;= current_date and cr.used_status = 0 and cr.lock_flag = 0
+	</sql>
+
+	<sql id="pageOrListSql">
+		select
+		kmi.user_name as member_username,
+		kmi.real_name as member_realname,
+		kmi.nick_name as member_nickname,
+		kmi.avatar as member_avatar,
+		kmi.phone as member_phone,
+		km.logo as merchant_logo,
+		km.name as merchant_name,
+		cinfo.merchant_id,
+		cinfo.name as coupon_name,
+		cinfo.type as type,
+		cinfo.coupon_serial_number,
+		cinfo.coupon_type as coupon_type,
+		-- ifnull(date_format(cinfo.start_time, '%Y-%m-%d'), '-') as start_time,
+		-- ifnull(date_format(cinfo.end_time, '%Y-%m-%d'), '-') as end_time,
+		cr.coupon_start_time as start_time,
+		cr.coupon_end_time as end_time,
+		cr.create_time as receive_time,
+		cinfo.sub_money as coupon_money,
+		cr.coupon_money as redpack_money,
+		cr.used_time as used_time,
+		cinfo.full_money as full_money,
+		cinfo.coupon_set_info as set_info,
+		cinfo.rule_info,
+		cr.id as coupon_receive_id,
+		if(cr.coupon_end_time &gt;= current_date and cr.used_status = 0 and cr.lock_flag = 0 and cinfo.lock_flag = 0, true, false) as can_use,
+		if(cr.used_status = 1, true, false) as used,
+		if(cr.coupon_end_time &lt; current_date, true, false) as overdue,
+		if(cinfo.lock_flag = 1 and cr.used_status = 0 and cinfo.end_time &gt;= current_date, true, false) as locked
+		from kboparkx_coupon_receive cr
+		left join kboparkx_coupon_info cinfo on cinfo.coupon_serial_number = cr.coupon_serial_number
+		left join kboparkx_merchant km on km.id = cinfo.merchant_id
+		left join kboparkx_member_info kmi on kmi.phone = cr.member_phone
+		<where>
+			cr.del_flag = 0
+			<if test="query.typeKey != null and query.typeKey != ''">
+				and cinfo.type = #{query.typeKey}
+			</if>
+			<if test="query.typeKey == null or query.typeKey == ''">
+				and (cinfo.type = 'coupon' or cinfo.type = 'redpack')
+			</if>
+			<if test="query.merchantIdKey!=null and query.merchantIdKey != ''">
+				and km.id = #{query.merchantIdKey}
+			</if>
+			<if test="query.couponIdKey!=null and query.couponIdKey != ''">
+				and cinfo.id = #{query.couponIdKey}
+			</if>
+			<if test="query.memberIdKey!=null and query.memberIdKey != ''">
+				and cr.member_id = #{query.memberIdKey}
+			</if>
+			<if test="query.startUsedTimeKey!=null">
+				and cr.used_time &gt; #{query.startUsedTimeKey}
+			</if>
+			<if test="query.endUsedTimeKey!=null">
+				and cr.used_time &lt; date_add(date(#{query.endUsedTimeKey}), interval 1 day)
+			</if>
+			<if test="query.couponTypeKey!=null and query.couponTypeKey != ''">
+				and cinfo.coupon_type = #{query.couponTypeKey}
+			</if>
+			<choose>
+				<!-- 查询可用的 -->
+				<when test='query.statusKey == "can-use"'>
+					and (
+						<include refid="canUseCouponCondition"></include>
+					)
+				</when>
+				<!-- 查询已用的 -->
+				<when test='query.statusKey == "used"'>
+					and (cr.used_status = 1)
+				</when>
+				<!-- 查询已过期的 -->
+				<when test='query.statusKey == "overdue"'>
+					and (cr.coupon_end_time &lt; current_date
+				</when>
+				<!-- 查询锁定的 -->
+				<when test='query.statusKey == "locked"'>
+					and (cinfo.lock_flag = 1 and cr.used_status = 0 and cinfo.end_time &gt;= current_date)
+				</when>
+				<!-- 查询不可用的,已过期和已使用 -->
+				<when test='query.statusKey == "disabled"'>
+					and (cr.coupon_end_time &lt; current_date or cr.used_status = 1)
+				</when>
+				<!-- 默认查询全部状态的 -->
+				<otherwise>
+
+				</otherwise>
+			</choose>
+		</where>
+		order by cr.id desc
+	</sql>
+
+	<select id="selectMemberCouponPage" resultType="com.kbopark.operation.dto.MemberCouponDTO">
+		<include refid="pageOrListSql"/>
+	</select>
+
+	<select id="selectMemberCouponList" resultType="com.kbopark.operation.dto.MemberCouponDTO">
+		<include refid="pageOrListSql"/>
+	</select>
+
+	<select id="lastMonthCountGroup" resultType="com.kbopark.operation.apidto.MonthNumberStatistics">
+		select dates.year_num as year_num, dates.month_num as month_num, ifnull(count_list.`number`, '0') as `number`
+		from
+		<foreach collection="offsetList" item="offset" open="(" close=") as dates" separator="union">
+			select YEAR(DATE_SUB(current_date, interval ${offset} month)) as year_num,
+			MONTH(DATE_SUB(current_date, interval ${offset} month)) as month_num,
+			concat(YEAR(DATE_SUB(current_date, interval ${offset} month)), '-', MONTH(DATE_SUB(current_date, interval ${offset} month))) as year_month_num
+		</foreach>
+		left join (select count(1) as `number`,
+		concat(YEAR(kcr.create_time), '-', MONTH(kcr.create_time)) as year_month_number
+		from kboparkx_coupon_receive kcr
+		<where>
+			!kcr.del_flag and kcr.create_time &gt; DATE_SUB(current_date, interval ${offsetList.size} month)
+			<if test="merchantId != null and merchantId != ''">
+				and kcr.merchant_id = #{merchantId}
+			</if>
+		</where>
+		group by concat(YEAR(kcr.create_time), '-', MONTH(kcr.create_time)))
+		as count_list
+		on dates.year_month_num = count_list.year_month_number
+		order by year_num, month_num
+	</select>
+</mapper>

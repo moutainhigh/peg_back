@@ -1,0 +1,4 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+    cn.qdzhhl.kbopark.common.log.LogAutoConfiguration
+org.springframework.context.ApplicationContextInitializer=\
+    cn.qdzhhl.kbopark.common.log.init.ApplicationLoggerInitializer

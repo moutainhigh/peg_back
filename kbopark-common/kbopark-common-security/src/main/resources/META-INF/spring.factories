@@ -1,0 +1,7 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  cn.qdzhhl.kbopark.common.security.component.GlobalExceptionHandlerResolver,\
+  cn.qdzhhl.kbopark.common.security.component.KboparkTokenEnhancer,\
+  cn.qdzhhl.kbopark.common.security.component.KboparkSecurityInnerAspect,\
+  cn.qdzhhl.kbopark.common.security.listener.AuthenticationFailureEventListener,\
+  cn.qdzhhl.kbopark.common.security.listener.AuthenticationSuccessEventListener
+

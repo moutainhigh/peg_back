@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ~
+  ~      Copyright (c) 2018-2025, kbopark All rights reserved.
+  ~
+  ~  Redistribution and use in source and binary forms, with or without
+  ~  modification, are permitted provided that the following conditions are met:
+  ~
+  ~ Redistributions of source code must retain the above copyright notice,
+  ~  this list of conditions and the following disclaimer.
+  ~  Redistributions in binary form must reproduce the above copyright
+  ~  notice, this list of conditions and the following disclaimer in the
+  ~  documentation and/or other materials provided with the distribution.
+  ~  Neither the name of the pig4cloud.com developer nor the names of its
+  ~  contributors may be used to endorse or promote products derived from
+  ~  this software without specific prior written permission.
+  ~  Author: kbopark
+  ~
+  -->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kbopark.operation.mapper.ConsumerOrderMapper">
+
+	<resultMap id="consumerOrderMap" type="com.kbopark.operation.entity.ConsumerOrder">
+		<id property="id" column="id"/>
+		<result property="orderNumber" column="order_number"/>
+		<result property="orderType" column="order_type"/>
+		<result property="thirdNumber" column="third_number"/>
+		<result property="productCode" column="product_code"/>
+		<result property="productDes" column="product_des"/>
+		<result property="payable" column="payable"/>
+		<result property="discount" column="discount"/>
+		<result property="money" column="money"/>
+		<result property="payed" column="payed"/>
+		<result property="couponUsed" column="coupon_used"/>
+		<result property="couponName" column="coupon_name"/>
+		<result property="couponSerialNumber" column="coupon_serial_number"/>
+		<result property="couponType" column="coupon_type"/>
+		<result property="couponRule" column="coupon_rule"/>
+		<result property="notifyStatus" column="notify_status"/>
+		<result property="refundStatus" column="refund_status"/>
+		<result property="notifyTime" column="notify_time"/>
+		<result property="memberName" column="member_name"/>
+		<result property="memberPhone" column="member_phone"/>
+		<result property="memberAvatar" column="member_avatar"/>
+		<result property="merchantId" column="merchant_id"/>
+		<result property="merchantName" column="merchant_name"/>
+		<result property="channelId" column="channel_id"/>
+		<result property="channelName" column="channel_name"/>
+		<result property="operationId" column="operation_id"/>
+		<result property="operationName" column="operation_name"/>
+		<result property="createTime" column="create_time"/>
+		<result property="createBy" column="create_by"/>
+		<result property="updateTime" column="update_time"/>
+		<result property="delFlag" column="del_flag"/>
+		<result property="treeId" column="tree_id"/>
+		<result property="travelTime" column="travel_time"/>
+		<result property="specType" column="spec_type"/>
+		<result property="buyNum" column="buy_num"/>
+		<result property="takeAddressId" column="take_address_id"/>
+		<result property="takeName" column="take_name"/>
+		<result property="takePhone" column="take_phone"/>
+		<result property="takeAddress" column="take_address"/>
+		<result property="takeAddressDetail" column="take_address_detail"/>
+
+	</resultMap>
+
+
+	<select id="selectMerchantOrderPage" resultType="com.kbopark.operation.dto.MerchantPayOrderDTO">
+		select kco.id as id,
+		kco.order_number as order_number,
+		kco.payable as payable,
+		kco.discount as discount,
+		kco.money as money,
+		kco.payed as payed,
+		kco.coupon_name as coupon_name,
+		kco.notify_status as notify_status,
+		kco.notify_time as notify_time,
+		kco.member_phone as member_phone,
+		kco.merchant_id as merchant_id,
+		kco.create_time as create_time,
+		km.simple_name as merchant_simple_name,
+		km.name as merchant_name,
+		km.logo as merchant_logo,
+		kmi.nick_name as member_nickname,
+		kmi.avatar as member_avatar
+		from kboparkx_consumer_order kco
+		left join kboparkx_member_info kmi on kmi.phone = kco.member_phone
+		left join kboparkx_merchant km on km.id = kco.merchant_id
+		<where>
+			kco.del_flag != 1
+			<if test="query.merchantId!=null and query.merchantId != ''">
+				and kco.merchant_id = #{query.merchantId}
+			</if>
+			<if test="query.orderNumber!=null and query.orderNumber != ''">
+				and kco.order_number like concat('%', #{query.orderNumber}, '%')
+			</if>
+			<if test="query.promoteCode!=null and query.promoteCode != ''">
+				and km.promote_code = #{query.promoteCode}
+			</if>
+			<if test="query.notifyStatus!=null and query.notifyStatus != ''">
+				and kco.notify_status = #{query.notifyStatus}
+			</if>
+			<if test="query.startPayedTimeKey!=null">
+				and kco.create_time &gt; #{query.startPayedTimeKey}
+			</if>
+			<if test="query.endPayedTimeKey!=null">
+				and kco.create_time &lt; date_add(date(#{query.endPayedTimeKey}), interval 1 day)
+			</if>
+		</where>
+		order by kco.id desc
+	</select>
+
+	<select id="getMerchantIncomeMoney" resultType="java.lang.Double">
+		select ifnull(sum(money), 0) as number
+		from kboparkx_consumer_order kco
+		<where>
+			kco.notify_status = 'SUCCESS' and !del_flag and notify_time is not null
+			<if test="merchantId!=null">
+				and kco.merchant_id = #{merchantId}
+			</if>
+			<if test="startDate!=null">
+				and kco.notify_time &gt; #{startDate}
+			</if>
+			<if test="endDate!=null">
+				and kco.notify_time &lt; #{endDate}
+			</if>
+		</where>
+	</select>
+
+
+	<select id="lastMonthCountGroup" resultType="com.kbopark.operation.apidto.MonthNumberStatistics">
+		select dates.year_num as year_num, dates.month_num as month_num, ifnull(count_list.`number`, '0') as `number`
+		from
+		<foreach collection="offsetList" item="offset" open="(" close=") as dates" separator="union">
+			select YEAR(DATE_SUB(current_date, interval ${offset} month)) as year_num,
+			MONTH(DATE_SUB(current_date, interval ${offset} month)) as month_num,
+			concat(YEAR(DATE_SUB(current_date, interval ${offset} month)), '-', MONTH(DATE_SUB(current_date, interval ${offset} month))) as year_month_num
+		</foreach>
+		left join (select count(1) as `number`,
+		concat(YEAR(kco.notify_time), '-', MONTH(kco.notify_time)) as year_month_number
+		from kboparkx_consumer_order kco
+		<where>
+			!kco.del_flag and kco.notify_time &gt; DATE_SUB(current_date, interval ${offsetList.size} month) and kco.notify_status='SUCCESS'
+			<if test="merchantId != null and merchantId != ''">
+				and kco.merchant_id = #{merchantId}
+			</if>
+		</where>
+		group by concat(YEAR(kco.notify_time), '-', MONTH(kco.notify_time)))
+		as count_list
+		on dates.year_month_num = count_list.year_month_number
+		order by year_num, month_num
+	</select>
+
+	<select id="lastMonthMoneyGroup" resultType="com.kbopark.operation.apidto.MonthNumberStatistics">
+		select dates.year_num as year_num, dates.month_num as month_num, ifnull(count_list.`number`, '0') as `number`
+		from
+		<foreach collection="offsetList" item="offset" open="(" close=") as dates" separator="union">
+			select YEAR(DATE_SUB(current_date, interval ${offset} month)) as year_num,
+			MONTH(DATE_SUB(current_date, interval ${offset} month)) as month_num,
+			concat(YEAR(DATE_SUB(current_date, interval ${offset} month)), '-', MONTH(DATE_SUB(current_date, interval ${offset} month))) as year_month_num
+		</foreach>
+		left join (select sum(kco.money) as `number`,
+		concat(YEAR(kco.notify_time), '-', MONTH(kco.notify_time)) as year_month_number
+		from kboparkx_consumer_order kco
+		<where>
+			!kco.del_flag and kco.notify_time &gt; DATE_SUB(current_date, interval ${offsetList.size} month) and kco.notify_status='SUCCESS'
+			<if test="merchantId != null and merchantId != ''">
+				and kco.merchant_id = #{merchantId}
+			</if>
+		</where>
+		group by concat(YEAR(kco.notify_time), '-', MONTH(kco.notify_time)))
+		as count_list
+		on dates.year_month_num = count_list.year_month_number
+		order by year_num, month_num
+	</select>
+</mapper>
